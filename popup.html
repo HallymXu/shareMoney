@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>合伙人利润分配工具</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            width: 500px;  /* 增加整体宽度 */
+            padding: 12px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .input-group {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        label {
+            min-width: 70px;
+            text-align: right;
+        }
+        input[type="number"] {
+            width: 80px;
+            padding: 4px;
+            font-size: 13px;
+        }
+        button {
+            width: 100%;
+            padding: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .section-container {
+            margin-bottom: 12px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        h1 {
+            font-size: 20px;
+            margin: 0 0 16px 0;
+            text-align: center;
+            color: #333;
+        }
+        h2 {
+            font-size: 16px;
+            margin: 0 0 12px 0;
+            color: #444;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: normal;
+        }
+        select {
+            width: 100%;
+            padding: 4px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        #resultLog {
+            white-space: pre-wrap;
+            font-family: monospace;
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.4;
+            color: black;
+            border: 1px solid #ddd;
+        }
+        .result-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: white;
+            padding: 12px;
+            border-radius: 4px;
+        }
+        .chart-container {
+            width: 100%;
+            height: 180px;
+            background-color: white;
+        }
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            background-color: white;
+        }
+        .log-container {
+            width: 100%;
+            background-color: white;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+        #sectionsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        #sectionsContainer .input-group {
+            margin-bottom: 0;
+        }
+        #contributionTable {
+            overflow-x: auto;
+        }
+        #contributionTable table {
+            min-width: 300px;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .button-group button {
+            flex: 1;
+            margin: 0;
+        }
+        .export-button {
+            background-color: #2196F3;
+        }
+        .export-button:hover {
+            background-color: #1976D2;
+        }
+        /* 顶部布局样式 */
+        .top-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .top-row .section-container {
+            flex: 1;
+            margin-bottom: 0;
+            min-width: 0; /* 防止flex子项溢出 */
+        }
+        .top-row .input-group {
+            margin-bottom: 10px;
+        }
+        .top-row h2 {
+            margin-bottom: 14px;
+        }
+        /* 合伙人贡献表样式 */
+        .contribution-section {
+            margin-bottom: 16px;
+        }
+        /* 计算结果区域样式 */
+        .result-section {
+            margin-top: 16px;
+        }
+        /* 新增样式 */
+        .section-title-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .section-title-container h2 {
+            margin: 0;
+        }
+        .assignable-label {
+            font-size: 13px;
+            color: #666;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>合伙人利润分配工具</h1>
+        
+        <div class="top-row">
+            <div class="section-container">
+                <h2>🧾 项目参数</h2>
+                <div class="input-group">
+                    <label for="total">项目总金额：</label>
+                    <input type="number" id="total" value="18000" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="channel">渠道费用：</label>
+                    <input type="number" id="channel" value="3800" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="external">外包成本：</label>
+                    <input type="number" id="external" value="3600" step="0.01">
+                </div>
+            </div>
+
+            <div class="section-container">
+                <div class="section-title-container">
+                    <h2>🧱 板块设置</h2>
+                    <span class="assignable-label">（参与分配）</span>
+                </div>
+                <div id="sectionsContainer">
+                    <!-- Sections will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container contribution-section">
+            <h2>👥 合伙人贡献表</h2>
+            <div id="contributionTable">
+                <!-- Contribution table will be dynamically added here -->
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="calculateBtn" class="calculate-button">📐 计算利润分配</button>
+            <button id="exportBtn" class="export-button">📷 导出图片</button>
+            <button id="clearBtn" class="clear-button">🗑️ 清空数据</button>
+        </div>
+
+        <div class="section-container result-section">
+            <h2>📊 计算结果</h2>
+            <div class="result-container">
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="log-container">
+                    <pre id="resultLog"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/chart.min.js"></script>
+    <script src="js/html2canvas.min.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html> 

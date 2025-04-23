@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "合伙人利润分配工具",
+  "version": "1.0",
+  "description": "一个用于计算合伙人利润分配的工具",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "permissions": ["storage"],
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  }
+} 
